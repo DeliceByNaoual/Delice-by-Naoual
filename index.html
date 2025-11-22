@@ -10,13 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --beige: #F5EBD8;
-            --cream: #FFF6E6;
-            --gold: #D4AF37;
-            --pink: #F7D6DA;
-            --pistachio: #9ED5B5;
-            --chocolate: #6B3E26;
-            --off-white: #FAF7F0;
+            --black: #000000;
+            --white: #FFFFFF;
+            --salmon-pink: #FF9AA2;
         }
 
         * {
@@ -26,9 +22,9 @@
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--cream);
-            color: var(--chocolate);
+            font-family: Arial, sans-serif;
+            background-color: var(--white);
+            color: var(--black);
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
@@ -85,13 +81,13 @@
 
         /* Carte centrale */
         .card {
-            background-color: rgba(255, 246, 230, 0.8);
-            backdrop-filter: blur(10px);
+            background-color: var(--white);
             border-radius: 20px;
             padding: 40px;
             width: 100%;
-            box-shadow: 0 15px 30px rgba(107, 62, 38, 0.1);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
+            border: 2px solid var(--salmon-pink);
         }
 
         /* Logo */
@@ -99,30 +95,28 @@
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background-color: var(--gold);
+            background-color: var(--salmon-pink);
             margin: 0 auto 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 48px;
-            color: var(--off-white);
-            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+            color: var(--white);
+            box-shadow: 0 8px 20px rgba(255, 154, 162, 0.3);
         }
 
-        /* Titre */
+        /* Titre avec Edwardian Script */
         .brand-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--chocolate);
+            font-family: 'Edwardian Script ITC', cursive;
+            font-size: 3.5rem;
+            color: var(--black);
             margin-bottom: 10px;
-            animation: pulseTitle 1.2s ease-in-out infinite;
         }
 
-        @keyframes pulseTitle {
-            0% { transform: scale(1); text-shadow: 0 0 0 rgba(212,175,55,0); }
-            50% { transform: scale(1.06); text-shadow: 0 6px 18px rgba(212,175,55,0.12); }
-            100% { transform: scale(1); text-shadow: 0 0 0 rgba(212,175,55,0); }
+        .by {
+            font-size: 2rem;
+            color: var(--salmon-pink);
+            vertical-align: middle;
         }
 
         /* Tagline et intro */
@@ -130,13 +124,13 @@
             font-size: 1.2rem;
             font-weight: 500;
             margin-bottom: 5px;
-            color: var(--chocolate);
+            color: var(--black);
         }
 
         .intro {
             font-size: 1rem;
             margin-bottom: 30px;
-            color: var(--chocolate);
+            color: var(--black);
             opacity: 0.8;
             line-height: 1.5;
         }
@@ -153,26 +147,27 @@
             align-items: center;
             justify-content: flex-start;
             padding: 15px 20px;
-            background-color: var(--gold);
-            color: var(--off-white);
-            border: none;
+            background-color: var(--white);
+            color: var(--black);
+            border: 2px solid var(--salmon-pink);
             border-radius: 14px;
             font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
             text-decoration: none;
-            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 4px 12px rgba(255, 154, 162, 0.2);
         }
 
         .contact-btn:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
-            filter: saturate(1.2);
+            box-shadow: 0 8px 20px rgba(255, 154, 162, 0.3);
+            background-color: var(--salmon-pink);
+            color: var(--white);
         }
 
         .contact-btn:active, .contact-btn:focus {
-            outline: 4px solid rgba(212, 175, 55, 0.18);
+            outline: 4px solid rgba(255, 154, 162, 0.3);
         }
 
         .btn-icon {
@@ -191,7 +186,7 @@
             }
             
             .brand-title {
-                font-size: 2rem;
+                font-size: 3rem;
             }
             
             .tagline {
@@ -209,7 +204,7 @@
             }
             
             .brand-title {
-                font-size: 1.8rem;
+                font-size: 2.5rem;
             }
             
             .tagline {
@@ -254,7 +249,7 @@
             <div class="logo">🍰</div>
             
             <!-- Titre -->
-            <h1 class="brand-title">Délice by Naoual</h1>
+            <h1 class="brand-title">Délice <span class="by">by</span> Naoual</h1>
             
             <!-- Tagline -->
             <p class="tagline">Le goût du bonheur dans chaque bouchée</p>
@@ -287,7 +282,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             const pastryRain = document.getElementById('pastryRain');
             const pastries = ['🍰', '🧁', '🍪', '🥐', '🎂', '🍩', '🥨', '🍫'];
-            const colors = ['#F7D6DA', '#9ED5B5', '#D4AF37', '#F5EBD8'];
             
             // Créer les icônes de pâtisseries qui tombent
             for (let i = 0; i < 25; i++) {
@@ -297,26 +291,16 @@
                 pastry.style.left = Math.random() * 100 + 'vw';
                 pastry.style.animationDuration = (Math.random() * 10 + 10) + 's';
                 pastry.style.animationDelay = Math.random() * 5 + 's';
-                pastry.style.color = colors[Math.floor(Math.random() * colors.length)];
+                pastry.style.color = '#FF9AA2';
                 pastry.style.fontSize = (Math.random() * 20 + 16) + 'px';
                 
                 pastryRain.appendChild(pastry);
-            }
-            
-            // Vérifier si la page a été ouverte via QR code
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('source') === 'qr') {
-                // Ajouter une animation spéciale pour les visiteurs via QR code
-                document.body.style.animation = 'none';
-                setTimeout(() => {
-                    document.body.style.animation = 'fadeIn 1s ease-out';
-                }, 100);
             }
         });
 
         // Réduire les animations si l'utilisateur les préfère réduites
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            document.querySelectorAll('.pastry-icon, .brand-title').forEach(el => {
+            document.querySelectorAll('.pastry-icon').forEach(el => {
                 el.style.animation = 'none';
             });
         }
