@@ -4,21 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Délice by Naoual — Contact & Commande</title>
-    <meta name="description" content="Contactez Naoual pour commandes de gâteaux, trompe-l'œil et pâtisseries artisanales.">
-
+    <meta name="description" content="Contactez Naoual pour commandes de gâteaux, trompe-l'œil et pâtisseries artisanales. Téléphone, email, Snapchat & Instagram.">
+    
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍰</text></svg>">
-
-    <!-- Font Awesome -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍰</text></svg>">
+    
+    <!-- Font Awesome pour les icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Fonts -->
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
     <style>
         :root {
-            --black: #000;
-            --white: #fff;
+            --black: #000000;
+            --white: #FFFFFF;
             --salmon-pink: #FF9AA2;
         }
 
@@ -29,25 +30,29 @@
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--white);
+            font-family: Arial, sans-serif;
+            background-color: var(--white);
             color: var(--black);
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
         }
 
-        /* ===== PLUIE DE GÂTEAUX ULTRA RAPIDE ===== */
+        /* Animation de pluie de pâtisseries */
         .pastry-rain {
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
+            z-index: -1;
         }
 
         .pastry-icon {
             position: absolute;
-            top: -120px;
+            top: -100px;
+            font-size: 24px;
             opacity: 0;
             animation: fall linear infinite;
             will-change: transform;
@@ -55,180 +60,260 @@
 
         @keyframes fall {
             0% {
-                transform: translateY(-120px) rotate(0deg);
+                transform: translateY(-100px) rotate(0deg);
                 opacity: 0;
             }
-            10% { opacity: 0.9; }
-            90% { opacity: 0.9; }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
             100% {
-                transform: translateY(110vh) rotate(360deg);
+                transform: translateY(100vh) rotate(360deg);
                 opacity: 0;
             }
         }
 
-        /* ===== CONTENU ===== */
+        /* Conteneur principal */
         .container {
-            position: relative;
-            z-index: 2;
-            min-height: 100vh;
-            max-width: 720px;
-            margin: auto;
-            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            max-width: 720px;
+            margin: 0 auto;
         }
 
+        /* Carte centrale */
+        .card {
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border: 2px solid var(--salmon-pink);
+        }
+
+        /* Logo */
         .logo {
-            width: 150px;
-            height: 150px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--salmon-pink), #ff7b8a);
+            background-color: var(--salmon-pink);
+            margin: 0 auto 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 64px;
-            color: white;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(255,154,162,.4);
-            animation: float 6s ease-in-out infinite;
+            font-size: 48px;
+            color: var(--white);
+            box-shadow: 0 8px 20px rgba(255, 154, 162, 0.3);
         }
 
-        @keyframes float {
-            50% { transform: translateY(-15px); }
-        }
-
+        /* Titre avec Edwardian Script */
         .brand-title {
             font-family: 'Edwardian Script ITC', cursive;
-            font-size: 4.5rem;
-            margin-bottom: 15px;
-        }
-
-        .by {
-            color: var(--salmon-pink);
-        }
-
-        .tagline {
-            font-size: 1.4rem;
+            font-size: 3.5rem;
+            color: var(--black);
             margin-bottom: 10px;
         }
 
-        .intro {
-            text-align: center;
-            max-width: 600px;
-            margin-bottom: 40px;
-            opacity: .9;
+        .by {
+            font-size: 2rem;
+            color: var(--salmon-pink);
+            vertical-align: middle;
         }
 
+        /* Tagline et intro */
+        .tagline {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: var(--black);
+        }
+
+        .intro {
+            font-size: 1rem;
+            margin-bottom: 30px;
+            color: var(--black);
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        /* Boutons de contact */
         .contact-buttons {
-            width: 100%;
-            max-width: 400px;
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 15px;
         }
 
         .contact-btn {
             display: flex;
             align-items: center;
-            padding: 18px 25px;
-            border-radius: 16px;
-            border: 2px solid var(--salmon-pink);
-            text-decoration: none;
+            justify-content: flex-start;
+            padding: 15px 20px;
+            background-color: var(--white);
             color: var(--black);
-            background: white;
-            font-size: 1.1rem;
-            transition: .3s;
-            box-shadow: 0 6px 20px rgba(255,154,162,.2);
+            border: 2px solid var(--salmon-pink);
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(255, 154, 162, 0.2);
         }
 
         .contact-btn:hover {
-            background: var(--salmon-pink);
-            color: white;
             transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(255, 154, 162, 0.3);
+            background-color: var(--salmon-pink);
+            color: var(--white);
+        }
+
+        .contact-btn:active, .contact-btn:focus {
+            outline: 4px solid rgba(255, 154, 162, 0.3);
         }
 
         .btn-icon {
-            font-size: 1.8rem;
-            margin-right: 15px;
-            width: 35px;
+            margin-right: 12px;
+            font-size: 1.5rem;
+            width: 30px;
             text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 32px 18px;
+            }
+            
+            .card {
+                padding: 30px 25px;
+            }
+            
+            .brand-title {
+                font-size: 3rem;
+            }
+            
+            .tagline {
+                font-size: 1.1rem;
+            }
+            
+            .intro {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 25px 20px;
+            }
+            
+            .brand-title {
+                font-size: 2.5rem;
+            }
+            
+            .tagline {
+                font-size: 1rem;
+            }
+            
+            .contact-btn {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .pastry-icon {
+                font-size: 18px;
+            }
+        }
+
+        /* Animation d'entrée */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            animation: fadeInUp 0.8s ease-out;
         }
     </style>
 </head>
-
 <body>
+    <!-- Pluie de pâtisseries animée -->
+    <div class="pastry-rain" id="pastryRain"></div>
 
-<div class="pastry-rain" id="pastryRain"></div>
-
-<div class="container">
-    <div class="logo">🍰</div>
-    <h1 class="brand-title">Délice <span class="by">by</span> Naoual</h1>
-    <p class="tagline">Le goût du bonheur dans chaque bouchée</p>
-    <p class="intro">Découvrez mes créations, passez commande ou posez-moi vos questions.</p>
-
-    <div class="contact-buttons">
-        <a href="mailto:delicebynaoual@gmail.com" class="contact-btn">
-            <span class="btn-icon"><i class="fas fa-envelope"></i></span>Email
-        </a>
-        <a href="https://www.snapchat.com/add/delice_bynaoual" target="_blank" class="contact-btn">
-            <span class="btn-icon"><i class="fab fa-snapchat-ghost"></i></span>Snapchat
-        </a>
-        <a href="https://www.instagram.com/les_patisseries_de_naoual" target="_blank" class="contact-btn">
-            <span class="btn-icon"><i class="fab fa-instagram"></i></span>Instagram
-        </a>
+    <!-- Conteneur principal -->
+    <div class="container">
+        <div class="card">
+            <!-- Logo placeholder -->
+            <div class="logo">🍰</div>
+            
+            <!-- Titre -->
+            <h1 class="brand-title">Délice <span class="by">by</span> Naoual</h1>
+            
+            <!-- Tagline -->
+            <p class="tagline">Le goût du bonheur dans chaque bouchée</p>
+            
+            <!-- Introduction -->
+            <p class="intro">Découvrez mes créations, passez commande ou posez-moi vos questions je suis à votre écoute pour réaliser vos envies gourmandes.</p>
+            
+            <!-- Boutons de contact -->
+            <div class="contact-buttons">
+                <a href="mailto:delicebynaoual@gmail.com" class="contact-btn" aria-label="Email">
+                    <span class="btn-icon"><i class="fas fa-envelope"></i></span>
+                    <span>Email</span>
+                </a>
+                
+                <a href="https://www.snapchat.com/add/delice_bynaoual" target="_blank" class="contact-btn" aria-label="Snapchat">
+                    <span class="btn-icon"><i class="fab fa-snapchat-ghost"></i></span>
+                    <span>Snapchat</span>
+                </a>
+                
+                <a href="https://www.instagram.com/les_patisseries_de_naoual" target="_blank" class="contact-btn" aria-label="Instagram">
+                    <span class="btn-icon"><i class="fab fa-instagram"></i></span>
+                    <span>Instagram</span>
+                </a>
+            </div>
+        </div>
     </div>
-</div>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const rain = document.getElementById("pastryRain");
-    const icons = ["🍰","🧁","🍪","🥐","🎂","🍩"];
-    const positions = new Set();
+    <script>
+        // Animation de pluie de pâtisseries
+        document.addEventListener('DOMContentLoaded', function() {
+            const pastryRain = document.getElementById('pastryRain');
+            const pastries = ['🍰', '🧁', '🍪', '🥐', '🎂', '🍩'];
+            
+            // Créer les icônes de pâtisseries qui tombent
+            for (let i = 0; i < 25; i++) {
+                const pastry = document.createElement('div');
+                pastry.className = 'pastry-icon';
+                pastry.textContent = pastries[Math.floor(Math.random() * pastries.length)];
+                pastry.style.left = Math.random() * 100 + 'vw';
+                pastry.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                pastry.style.animationDelay = Math.random() * 5 + 's';
+                pastry.style.color = '#FF9AA2';
+                pastry.style.fontSize = (Math.random() * 20 + 16) + 'px';
+                
+                pastryRain.appendChild(pastry);
+            }
+        });
 
-    function randomPosition() {
-        let p;
-        do {
-            p = Math.floor(Math.random() * 90) + 5;
-        } while (positions.has(p));
-        positions.add(p);
-        return p;
-    }
-
-    function createPastry() {
-        const el = document.createElement("div");
-        const pos = randomPosition();
-
-        el.className = "pastry-icon";
-        el.textContent = icons[Math.floor(Math.random()*icons.length)];
-        el.style.left = pos + "vw";
-        el.style.fontSize = (20 + Math.random()*25) + "px";
-        el.style.color = "#FF9AA2";
-
-        // 🔥 VITESSE AUGMENTÉE 🔥
-        const duration = 6 + Math.random()*4; // 6–10s
-        el.style.animationDuration = duration + "s";
-
-        rain.appendChild(el);
-
-        setTimeout(() => {
-            positions.delete(pos);
-            el.remove();
-        }, duration * 1000);
-    }
-
-    // DÉMARRAGE IMMÉDIAT
-    for (let i = 0; i < 15; i++) {
-        setTimeout(createPastry, i * 250);
-    }
-
-    // PLUIE DENSE
-    setInterval(() => {
-        if (positions.size < 30) createPastry();
-    }, 600);
-});
-</script>
-
+        // Réduire les animations si l'utilisateur les préfère réduites
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.querySelectorAll('.pastry-icon').forEach(el => {
+                el.style.animation = 'none';
+            });
+        }
+    </script>
 </body>
 </html>
