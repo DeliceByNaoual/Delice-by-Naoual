@@ -9,7 +9,7 @@
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='50' y='70' font-size='70' fill='%23FF9AA2' text-anchor='middle'>🍰</text></svg>">
     
-    <!-- Font Awesome -->
+    <!-- Font Awesome (gardé pour d'autres usages éventuels) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Google Fonts -->
@@ -19,6 +19,28 @@
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
     
     <style>
+        /* ===== PROPRIÉTÉS PERSONNALISÉES POUR L'ANIMATION ===== */
+        @property --a {
+            syntax: '<angle>';
+            inherits: true;
+            initial-value: 0deg;
+        }
+        @property --p {
+            syntax: '<percentage>';
+            inherits: true;
+            initial-value: 0%;
+        }
+        @property --c1 {
+            syntax: '<color>';
+            inherits: true;
+            initial-value: #000;
+        }
+        @property --c2 {
+            syntax: '<color>';
+            inherits: true;
+            initial-value: #000;
+        }
+
         :root {
             --primary: #FF9AA2;
             --primary-dark: #E87B85;
@@ -28,7 +50,7 @@
             --accent2: #B5EAD7;
             --bg: #FFF9F7;
             --bg-light: #FFFDFC;
-            --bg-card: rgba(255, 255, 255, 0.9);
+            --bg-card: rgba(255, 255, 255, 0.2); /* MODIFIÉ : plus transparent pour laisser voir l'arrière-plan */
             --text: #5A4A42;
             --text-dim: #8A7968;
             --text-light: #C4B5A5;
@@ -39,11 +61,9 @@
             --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             --border-radius: 16px;
             
-            /* Couleurs pour le lait au chocolat */
-            --chocolate: #6B4423;
-            --milk-chocolate: #9C6F44;
-            --cream: #F7E7CE;
-            --white-chocolate: #FFF8E7;
+            /* Couleurs crème pour le fond animé */
+            --cream-light: #F7E7CE;
+            --cream-dark: #E8D5B5;
         }
         
         * {
@@ -57,7 +77,6 @@
         }
         
         body {
-            background: var(--bg);
             color: var(--text);
             font-family: 'Poppins', sans-serif;
             min-height: 100vh;
@@ -65,8 +84,66 @@
             position: relative;
             -webkit-tap-highlight-color: transparent;
         }
+
+        /* Fond animé */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+            
+            --s: 80px;
+            --_g: #0000, var(--c1) 2deg calc(var(--a) - 2deg), #0000 var(--a);
+            background: 
+                conic-gradient(from calc(-45deg - var(--a)/2) at top var(--p) left var(--p), var(--_g)),
+                conic-gradient(from calc(-45deg - var(--a)/2) at top var(--p) left var(--p), var(--_g)),
+                conic-gradient(from calc(45deg - var(--a)/2) at top var(--p) right var(--p), var(--_g)),
+                conic-gradient(from calc(45deg - var(--a)/2) at top var(--p) right var(--p), var(--_g)),
+                conic-gradient(from calc(-135deg - var(--a)/2) at bottom var(--p) left var(--p), var(--_g)),
+                conic-gradient(from calc(-135deg - var(--a)/2) at bottom var(--p) left var(--p), var(--_g)),
+                conic-gradient(from calc(135deg - var(--a)/2) at bottom var(--p) right var(--p), var(--_g)),
+                conic-gradient(from calc(135deg - var(--a)/2) at bottom var(--p) right var(--p), var(--_g))
+                var(--c2);
+            background-size: calc(2*var(--s)) calc(2*var(--s));
+            animation: m 4s infinite alternate ease-in-out;
+        }
+
+        @keyframes m {
+            0%, 15% {
+                --a: 135deg;
+                --p: 20%;
+                --c1: var(--cream-light);
+                --c2: var(--cream-dark);
+                background-position: 0 0, var(--s) var(--s);
+            }
+            45%, 50% {
+                --a: 90deg;
+                --p: 25%;
+                --c1: var(--cream-light);
+                --c2: var(--cream-dark);
+                background-position: 0 0, var(--s) var(--s);
+            }
+            50.01%, 55% {
+                --a: 90deg;
+                --p: 25%;
+                --c2: var(--cream-light);
+                --c1: var(--cream-dark);
+                background-position: var(--s) 0, 0 var(--s);
+            }
+            85%, 100% {
+                --a: 135deg;
+                --p: 20%;
+                --c2: var(--cream-light);
+                --c1: var(--cream-dark);
+                background-position: var(--s) 0, 0 var(--s);
+            }
+        }
         
-        /* Background layers */
+        /* Couche de fond supplémentaire avec dégradés doux */
         .bg-layer {
             position: fixed;
             top: 0;
@@ -75,13 +152,13 @@
             height: 100%;
             z-index: -3;
             background: 
-                radial-gradient(ellipse at 20% 20%, rgba(255, 218, 193, 0.2) 0%, transparent 40%),
-                radial-gradient(ellipse at 80% 80%, rgba(181, 234, 215, 0.2) 0%, transparent 40%),
-                radial-gradient(ellipse at 40% 60%, rgba(255, 154, 162, 0.15) 0%, transparent 40%),
-                var(--bg);
+                radial-gradient(ellipse at 20% 20%, rgba(255, 218, 193, 0.15) 0%, transparent 40%),
+                radial-gradient(ellipse at 80% 80%, rgba(181, 234, 215, 0.15) 0%, transparent 40%),
+                radial-gradient(ellipse at 40% 60%, rgba(255, 154, 162, 0.1) 0%, transparent 40%);
+            pointer-events: none;
         }
         
-        /* Container principal - amélioré pour mobile */
+        /* Container principal */
         .container {
             min-height: 100vh;
             display: flex;
@@ -94,9 +171,10 @@
             max-width: min(1200px, 95vw);
             margin: 0 auto;
             position: relative;
+            z-index: 1;
         }
         
-        /* En-tête avec logo et nom - taille AUGMENTÉE */
+        /* En-tête avec logo et nom */
         .header {
             display: flex;
             flex-direction: column;
@@ -107,7 +185,7 @@
             padding: 0 10px;
         }
         
-        /* Logo 3D - Gâteau en 3D avec effets - taille AUGMENTÉE */
+        /* Logo 3D */
         .logo-container {
             position: relative;
             display: flex;
@@ -130,7 +208,6 @@
             background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
         }
 
-        /* Ajustements pour le modèle 3D */
         model-viewer {
             width: 100%;
             height: 100%;
@@ -146,7 +223,6 @@
             animation-play-state: paused;
         }
 
-        /* Nom sans animation - by en rose, Délice Naoual en noir */
         .brand {
             font-family: 'Parisienne', cursive;
             font-size: clamp(2.8rem, 7vw, 5.5rem);
@@ -231,7 +307,7 @@
             background: linear-gradient(90deg, transparent, var(--primary), transparent);
         }
         
-        /* Grille de boutons perfectionnés - améliorée pour mobile */
+        /* Grille de boutons */
         .buttons-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
@@ -239,7 +315,7 @@
             width: 100%;
         }
         
-        /* BOUTONS PERFECTIONNÉS - Design Pâtisserie Luxe - taille réduite */
+        /* BOUTONS PERFECTIONNÉS - fond transparent */
         .btn-perfected {
             position: relative;
             display: flex;
@@ -254,18 +330,16 @@
             overflow: hidden;
             isolation: isolate;
             transition: var(--transition);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(5px); /* MODIFIÉ : flou réduit pour mieux voir l'arrière-plan */
             box-shadow: 
                 0 8px 20px rgba(139, 69, 19, 0.1),
                 0 0 0 1px rgba(255, 154, 162, 0.1),
                 inset 0 0 0 1px rgba(255, 255, 255, 0.9);
-            animation: fadeInUp 0.8s ease forwards;
-            opacity: 0;
-            transform: translateY(20px);
+            
             min-height: 90px;
         }
         
-        /* Effet de bordure animée - Vague lait au chocolat - INFINI */
+        /* Effet de bordure fixe */
         .btn-border {
             position: absolute;
             inset: 0;
@@ -273,13 +347,13 @@
             padding: 2px;
             background: linear-gradient(
                 45deg,
-                var(--chocolate),
-                var(--milk-chocolate),
-                var(--cream),
-                var(--white-chocolate),
-                var(--cream),
-                var(--milk-chocolate),
-                var(--chocolate)
+                #6B4423,
+                #9C6F44,
+                #F7E7CE,
+                #FFF8E7,
+                #F7E7CE,
+                #9C6F44,
+                #6B4423
             );
             background-size: 300% 300%;
             -webkit-mask: 
@@ -288,10 +362,9 @@
             -webkit-mask-composite: xor;
             mask-composite: exclude;
             opacity: 1;
-            animation: chocolateWave 6s linear infinite;
         }
         
-        /* Vague de lait au chocolat qui traverse - INFINI */
+        /* Effet vague fixe */
         .btn-wave {
             position: absolute;
             top: 0;
@@ -308,14 +381,14 @@
             );
             z-index: 1;
             opacity: 0;
-            animation: chocolateFlow 3s ease-in-out infinite;
+            transition: opacity 0.3s ease;
         }
         
         .btn-perfected:hover .btn-wave {
             opacity: 0.7;
         }
         
-        /* Icône perfectionnée - taille réduite */
+        /* Icône perfectionnée */
         .btn-icon-wrapper {
             position: relative;
             width: clamp(45px, 6vw, 55px);
@@ -328,11 +401,22 @@
         }
         
         .btn-icon {
-            font-size: clamp(1.4rem, 2vw, 1.7rem);
-            color: var(--primary);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: var(--transition);
             position: relative;
             z-index: 2;
+        }
+        
+        .btn-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            transition: var(--transition);
         }
         
         .icon-bg {
@@ -350,13 +434,12 @@
             transform: scale(1.2);
         }
         
-        .btn-perfected:hover .btn-icon {
-            transform: scale(1.2) rotate(10deg);
-            color: var(--primary-dark);
+        .btn-perfected:hover .btn-icon img {
+            transform: scale(1.2) rotate(5deg);
             filter: drop-shadow(0 0 8px var(--primary));
         }
         
-        /* Contenu du bouton - taille réduite */
+        /* Contenu du bouton */
         .btn-content {
             flex: 1;
             display: flex;
@@ -414,29 +497,17 @@
             opacity: 0;
             z-index: 1;
             transition: opacity 0.5s ease;
+            pointer-events: none;
         }
         
         .btn-perfected:hover .btn-light {
             opacity: 0.5;
         }
         
-        /* Indicateur de clic */
-        .click-indicator {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--primary);
-            opacity: 0;
-            z-index: 3;
-            pointer-events: none;
-            filter: blur(2px);
-        }
-        
         /* Boutons spécifiques avec couleurs différentes */
         .btn-email {
-            --primary: #FF9AA2;
-            --secondary: #FFDAC1;
+            --primary: #4989F4;
+            --secondary: #FF9AA2;
         }
         
         .btn-snapchat {
@@ -484,72 +555,6 @@
             100% { transform: rotate(-360deg); }
         }
         
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* Animation de vague de lait au chocolat - INFINI */
-        @keyframes chocolateWave {
-            0% {
-                background-position: 0% 50%;
-                filter: hue-rotate(0deg);
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-                filter: hue-rotate(360deg);
-            }
-        }
-        
-        /* Animation de flux de lait au chocolat qui traverse le bouton - INFINI */
-        @keyframes chocolateFlow {
-            0% {
-                left: -100%;
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.7;
-            }
-            90% {
-                opacity: 0.7;
-            }
-            100% {
-                left: 100%;
-                opacity: 0;
-            }
-        }
-        
-        @keyframes pulse {
-            0%, 100% { 
-                box-shadow: 0 0 20px rgba(255, 154, 162, 0.3);
-                transform: scale(1);
-            }
-            50% { 
-                box-shadow: 0 0 30px rgba(255, 154, 162, 0.6);
-                transform: scale(1.02);
-            }
-        }
-        
-        @keyframes clickRipple {
-            0% {
-                transform: scale(0);
-                opacity: 0.5;
-            }
-            100% {
-                transform: scale(3);
-                opacity: 0;
-            }
-        }
-        
         /* Effet de lumière sur les bords */
         .light-effect {
             position: fixed;
@@ -558,7 +563,7 @@
             border-radius: 50%;
             background: radial-gradient(circle, rgba(255, 154, 162, 0.1) 0%, transparent 70%);
             filter: blur(40px);
-            z-index: -2;
+            z-index: -1;
             animation: moveLight 25s linear infinite;
         }
         
@@ -587,43 +592,6 @@
             25% { transform: translate(80px, 40px) rotate(90deg); }
             50% { transform: translate(-40px, 80px) rotate(180deg); }
             75% { transform: translate(-80px, -40px) rotate(270deg); }
-        }
-        
-        /* Pluie de gâteaux INFINIE */
-        .pastry-rain {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            overflow: hidden;
-        }
-        
-        .pastry-item {
-            position: absolute;
-            font-size: clamp(18px, 3vw, 24px);
-            opacity: 0;
-            animation: fall linear infinite;
-            will-change: transform, opacity;
-        }
-        
-        @keyframes fall {
-            0% {
-                transform: translateY(-100px) translateX(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(100vh) translateX(20px) rotate(360deg);
-                opacity: 0;
-            }
         }
         
         /* RESPONSIVE AVANCÉ */
@@ -692,8 +660,9 @@
                 height: 45px;
             }
             
-            .btn-icon {
-                font-size: 1.4rem;
+            .btn-icon img {
+                width: 100%;
+                height: 100%;
             }
             
             .btn-title {
@@ -702,10 +671,6 @@
             
             .btn-subtitle {
                 font-size: 0.85rem;
-            }
-            
-            .pastry-item {
-                font-size: 16px;
             }
         }
         
@@ -749,8 +714,9 @@
                 height: 42px;
             }
             
-            .btn-icon {
-                font-size: 1.3rem;
+            .btn-icon img {
+                width: 100%;
+                height: 100%;
             }
             
             .btn-title {
@@ -803,8 +769,9 @@
                 height: 40px;
             }
             
-            .btn-icon {
-                font-size: 1.2rem;
+            .btn-icon img {
+                width: 100%;
+                height: 100%;
             }
             
             .btn-title {
@@ -875,22 +842,6 @@
             }
         }
         
-        /* Effet de chargement des boutons */
-        @keyframes btnLoad {
-            0% {
-                opacity: 0;
-                transform: translateY(30px) scale(0.95);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-        
-        .btn-perfected {
-            animation: btnLoad 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-        
         /* Désactiver les animations si préféré */
         @media (prefers-reduced-motion: reduce) {
             *,
@@ -904,13 +855,10 @@
     </style>
 </head>
 <body>
-    <!-- Effets de fond -->
+    <!-- Effets de fond (dégradés doux) -->
     <div class="bg-layer"></div>
     
-    <!-- Pluie de gâteaux INFINIE -->
-    <div class="pastry-rain" id="pastryRain"></div>
-    
-    <!-- Effets de lumière -->
+    <!-- Effets de lumière mobiles -->
     <div class="light-effect"></div>
     <div class="light-effect"></div>
     <div class="light-effect"></div>
@@ -921,15 +869,14 @@
         <div class="header">
             <!-- Logo 3D - Gâteau en 3D avec effets -->
             <div class="logo-container">
-                <div class="circle"></div>
-                <div class="circle"></div>
                 <div class="logo">
                     <model-viewer 
                         id="cake3DModel"
-                        src="https://raw.githubusercontent.com/zznkch/delice/main/gateau.glb"
+                        src="https://raw.githubusercontent.com/zznkch/delice/main/handpainted_watercolor_cake.glb"
                         alt="Gâteau 3D Délice by Naoual" 
                         disable-zoom 
                         auto-rotate
+                        rotation-per-second="60deg"
                         environment-image="neutral"
                         exposure="1"
                         shadow-intensity="1"
@@ -942,7 +889,7 @@
             </div>
             
             <h1 class="brand">
-                <span class="brand-text">Délice<span class="by">by</span>Naoual</span>
+                <span class="brand-text">Délice<span class="by"> by </span>Naoual</span>
             </h1>
             
             <p class="subtitle">Le goût du bonheur dans chaque bouchée</p>
@@ -953,24 +900,7 @@
             <h2 class="section-title">Contact et Commandes</h2>
             
             <div class="buttons-grid">
-                <!-- BOUTON EMAIL -->
-                <a class="btn-perfected btn-email" href="mailto:delicebynaoual@gmail.com" aria-label="Envoyer un email à Délice by Naoual">
-                    <div class="btn-border"></div>
-                    <div class="btn-wave"></div>
-                    <div class="btn-light"></div>
-                    
-                    <div class="btn-icon-wrapper">
-                        <div class="icon-bg"></div>
-                        <div class="btn-icon"><i class="fas fa-envelope"></i></div>
-                    </div>
-                    
-                    <div class="btn-content">
-                        <div class="btn-title">EMAIL</div>
-                        <div class="btn-subtitle">delicebynaoual@gmail.com</div>
-                    </div>
-                </a>
-                
-                <!-- BOUTON SNAPCHAT -->
+                <!-- BOUTON SNAPCHAT (premier) -->
                 <a class="btn-perfected btn-snapchat" target="_blank" href="https://www.snapchat.com/add/delice_bynaoual" aria-label="Visiter le profil Snapchat de Délice by Naoual">
                     <div class="btn-border"></div>
                     <div class="btn-wave"></div>
@@ -978,16 +908,18 @@
                     
                     <div class="btn-icon-wrapper">
                         <div class="icon-bg"></div>
-                        <div class="btn-icon"><i class="fab fa-snapchat-ghost"></i></div>
+                        <div class="btn-icon">
+                            <img src="https://raw.githubusercontent.com/zznkch/delice/main/ftouricone/snapchat.png" alt="Snapchat">
+                        </div>
                     </div>
                     
                     <div class="btn-content">
                         <div class="btn-title">SNAPCHAT</div>
-                        <div class="btn-subtitle">@delice_bynaoual</div>
+                        <div class="btn-subtitle">delice_bynaoual</div>
                     </div>
                 </a>
                 
-                <!-- BOUTON INSTAGRAM -->
+                <!-- BOUTON INSTAGRAM (deuxième) -->
                 <a class="btn-perfected btn-instagram" target="_blank" href="https://www.instagram.com/les_patisseries_de_naoual" aria-label="Visiter le profil Instagram de Délice by Naoual">
                     <div class="btn-border"></div>
                     <div class="btn-wave"></div>
@@ -995,12 +927,33 @@
                     
                     <div class="btn-icon-wrapper">
                         <div class="icon-bg"></div>
-                        <div class="btn-icon"><i class="fab fa-instagram"></i></div>
+                        <div class="btn-icon">
+                            <img src="https://raw.githubusercontent.com/zznkch/delice/main/ftouricone/instagram.png" alt="Instagram">
+                        </div>
                     </div>
                     
                     <div class="btn-content">
                         <div class="btn-title">INSTAGRAM</div>
-                        <div class="btn-subtitle">@les_patisseries_de_naoual</div>
+                        <div class="btn-subtitle">les_patisseries_de_naoual</div>
+                    </div>
+                </a>
+                
+                <!-- BOUTON EMAIL (troisième) -->
+                <a class="btn-perfected btn-email" href="mailto:delicebynaoual@gmail.com" aria-label="Envoyer un email à Délice by Naoual">
+                    <div class="btn-border"></div>
+                    <div class="btn-wave"></div>
+                    <div class="btn-light"></div>
+                    
+                    <div class="btn-icon-wrapper">
+                        <div class="icon-bg"></div>
+                        <div class="btn-icon">
+                            <img src="https://raw.githubusercontent.com/zznkch/delice/main/ftouricone/email.png" alt="Email">
+                        </div>
+                    </div>
+                    
+                    <div class="btn-content">
+                        <div class="btn-title">E-MAIL</div>
+                        <div class="btn-subtitle">delicebynaoual@gmail.com</div>
                     </div>
                 </a>
             </div>
@@ -1012,181 +965,35 @@
     </div>
 
     <script>
-        // Pluie de gâteaux INFINIE
-        let pastryInterval;
-        let activePastries = 0;
-        const maxPastries = 30;
-        
-        function createPastryRain() {
-            const pastryRain = document.getElementById('pastryRain');
-            const pastries = ['🍰', '🧁', '🎂', '🍪', '🥐', '🍩'];
-            
-            if (pastryInterval) clearInterval(pastryInterval);
-            
-            pastryInterval = setInterval(() => {
-                if (activePastries >= maxPastries) return;
-                
-                const pastry = document.createElement('div');
-                pastry.className = 'pastry-item';
-                const pastryType = pastries[Math.floor(Math.random() * pastries.length)];
-                pastry.textContent = pastryType;
-                
-                const leftPos = Math.random() * 100;
-                pastry.style.left = `${leftPos}vw`;
-                
-                const size = Math.random() * 15 + 15;
-                pastry.style.fontSize = `${size}px`;
-                
-                const delay = Math.random() * 5;
-                pastry.style.animationDelay = `${delay}s`;
-                
-                const duration = Math.random() * 10 + 8;
-                pastry.style.animationDuration = `${duration}s`;
-                
-                const hue = Math.floor(Math.random() * 30) + 320;
-                const saturation = Math.floor(Math.random() * 30) + 70;
-                const lightness = Math.floor(Math.random() * 20) + 60;
-                pastry.style.color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-                
-                pastry.style.textShadow = `0 0 8px hsla(${hue}, ${saturation}%, ${lightness}%, 0.5)`;
-                
-                pastryRain.appendChild(pastry);
-                activePastries++;
-                
-                setTimeout(() => {
-                    if (pastry.parentNode) {
-                        pastry.remove();
-                        activePastries--;
-                    }
-                }, duration * 1000);
-                
-            }, 300);
-        }
-        
         // Effets sur le modèle 3D
         const cake3DModel = document.getElementById('cake3DModel');
         
         cake3DModel.addEventListener('mouseenter', function() {
             this.style.animationPlayState = 'paused';
             this.style.transform = 'scale(1.3) rotateY(15deg)';
-            
-            const circles = document.querySelectorAll('.circle');
-            circles.forEach(circle => {
-                circle.style.animationDuration = '2s';
-            });
         });
         
         cake3DModel.addEventListener('mouseleave', function() {
             this.style.animationPlayState = 'running';
             this.style.transform = '';
-            
-            const circles = document.querySelectorAll('.circle');
-            circles.forEach(circle => {
-                circle.style.animationDuration = '';
-            });
         });
         
         cake3DModel.addEventListener('click', function() {
             this.style.transform = 'scale(1.5) rotateY(360deg)';
             this.style.transition = 'transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.5)';
             
-            createPastryExplosion();
-            speedUpRain();
+            // Animation bonus : accélération temporaire du fond
+            document.body.classList.add('speed-up-bg');
+            setTimeout(() => {
+                document.body.classList.remove('speed-up-bg');
+            }, 1000);
             
             setTimeout(() => {
                 this.style.transform = '';
             }, 800);
         });
-        
-        // Effet d'explosion de gâteaux
-        function createPastryExplosion() {
-            const pastryRain = document.getElementById('pastryRain');
-            const pastries = ['🍰', '🧁', '🎂', '🍪', '🥐', '🍩'];
-            
-            for (let i = 0; i < 12; i++) {
-                const pastry = document.createElement('div');
-                pastry.className = 'pastry-item';
-                pastry.textContent = pastries[Math.floor(Math.random() * pastries.length)];
-                
-                const centerX = window.innerWidth / 2;
-                const centerY = window.innerHeight / 2;
-                
-                pastry.style.left = `${centerX}px`;
-                pastry.style.top = `${centerY}px`;
-                pastry.style.fontSize = `${Math.random() * 18 + 15}px`;
-                pastry.style.animationDuration = `${Math.random() * 3 + 2}s`;
-                pastry.style.color = `hsl(${Math.floor(Math.random() * 30) + 320}, 90%, 65%)`;
-                pastry.style.animation = 'none';
-                pastry.style.transition = 'all 0.8s ease-out';
-                
-                pastryRain.appendChild(pastry);
-                activePastries++;
-                
-                setTimeout(() => {
-                    const angle = Math.random() * Math.PI * 2;
-                    const distance = Math.random() * 250 + 80;
-                    const targetX = centerX + Math.cos(angle) * distance;
-                    const targetY = centerY + Math.sin(angle) * distance;
-                    
-                    pastry.style.left = `${targetX}px`;
-                    pastry.style.top = `${targetY}px`;
-                    pastry.style.opacity = '0';
-                    pastry.style.transform = `rotate(${Math.random() * 720}deg)`;
-                }, 10);
-                
-                setTimeout(() => {
-                    if (pastry.parentNode) {
-                        pastry.remove();
-                        activePastries--;
-                    }
-                }, 1000);
-            }
-        }
-        
-        // Accélérer la pluie temporairement
-        function speedUpRain() {
-            const originalSpeed = 300;
-            const speedUpSpeed = 100;
-            
-            clearInterval(pastryInterval);
-            pastryInterval = setInterval(() => {
-                if (activePastries >= maxPastries) return;
-                
-                for (let i = 0; i < 2; i++) {
-                    if (activePastries >= maxPastries) break;
-                    
-                    const pastry = document.createElement('div');
-                    pastry.className = 'pastry-item';
-                    const pastries = ['🍰', '🧁', '🎂', '🍪', '🥐', '🍩'];
-                    pastry.textContent = pastries[Math.floor(Math.random() * pastries.length)];
-                    
-                    pastry.style.left = `${Math.random() * 100}vw`;
-                    pastry.style.fontSize = `${Math.random() * 15 + 12}px`;
-                    const duration = Math.random() * 8 + 6;
-                    pastry.style.animationDuration = `${duration}s`;
-                    
-                    const hue = Math.floor(Math.random() * 30) + 320;
-                    pastry.style.color = `hsl(${hue}, 80%, 70%)`;
-                    
-                    document.getElementById('pastryRain').appendChild(pastry);
-                    activePastries++;
-                    
-                    setTimeout(() => {
-                        if (pastry.parentNode) {
-                            pastry.remove();
-                            activePastries--;
-                        }
-                    }, duration * 1000);
-                }
-            }, speedUpSpeed);
-            
-            setTimeout(() => {
-                clearInterval(pastryInterval);
-                createPastryRain();
-            }, 2500);
-        }
-        
-        // Effets sur les boutons
+
+        // Effets sur les boutons (lumière qui suit la souris)
         const perfectedButtons = document.querySelectorAll('.btn-perfected');
         
         perfectedButtons.forEach(btn => {
@@ -1200,44 +1007,11 @@
                 light.style.left = `${x}px`;
                 light.style.top = `${y}px`;
                 light.style.transform = 'translate(-50%, -50%)';
-                btn.style.animation = 'pulse 2s infinite';
-            });
-            
-            btn.addEventListener('mouseleave', () => {
-                btn.style.animation = '';
-            });
-            
-            btn.addEventListener('click', function(e) {
-                const indicator = document.createElement('div');
-                indicator.className = 'click-indicator';
-                indicator.style.left = `${e.offsetX}px`;
-                indicator.style.top = `${e.offsetY}px`;
-                this.appendChild(indicator);
-                
-                indicator.style.animation = 'clickRipple 0.6s ease-out forwards';
-                
-                setTimeout(() => {
-                    indicator.remove();
-                }, 600);
-                
-                this.style.transform = 'scale(0.98)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 150);
             });
         });
         
         // Initialisation
         window.addEventListener('load', () => {
-            createPastryRain();
-            
-            perfectedButtons.forEach((btn, index) => {
-                setTimeout(() => {
-                    btn.style.opacity = '1';
-                    btn.style.transform = 'translateY(0)';
-                }, 300 + (index * 100));
-            });
-            
             document.body.style.opacity = '0';
             document.body.style.transition = 'opacity 0.8s ease';
             
@@ -1246,46 +1020,22 @@
             }, 100);
         });
         
-        // Redimensionnement
-        let resizeTimeout;
-        function handleResize() {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                const pastryItems = document.querySelectorAll('.pastry-item');
-                pastryItems.forEach(item => item.remove());
-                activePastries = 0;
-                createPastryRain();
-            }, 250);
-        }
-        
-        window.addEventListener('resize', handleResize);
-        
-        // Optimisation pour mobile
-        function checkMobilePerformance() {
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            
-            if (isMobile) {
-                maxPastries = 20;
-                clearInterval(pastryInterval);
-                createPastryRain();
-            }
-        }
-        
-        window.addEventListener('load', checkMobilePerformance);
-        
         // Réduire les animations si préféré
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            clearInterval(pastryInterval);
-            
-            document.querySelectorAll('.pastry-item').forEach(el => {
-                el.style.animation = 'none';
-            });
-            
-            document.querySelectorAll('.btn-border, .btn-wave').forEach(el => {
-                el.style.animation = 'none';
-            });
+            // Désactiver l'animation du fond
+            document.body.classList.add('reduce-motion');
         }
     </script>
+
+    <style>
+        /* Accélération temporaire du fond au clic sur le gâteau */
+        .speed-up-bg::before {
+            animation-duration: 0.8s !important;
+        }
+        /* Réduction de mouvement */
+        .reduce-motion::before {
+            animation: none !important;
+        }
+    </style>
 </body>
 </html>
-
