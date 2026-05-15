@@ -19,6 +19,12 @@
     
     <style>
         /* ===== PROPRIÉTÉS PERSONNALISÉES POUR L'ANIMATION ===== */
+        * {
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+        }
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
         @property --a {
             syntax: '<angle>';
             inherits: true;
@@ -1025,6 +1031,40 @@
             document.body.classList.add('reduce-motion');
         }
     </script>
+    <script>
+  // 1. Désactiver le clic droit (menu contextuel)
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    return false;
+  });
+
+  // 2. Bloquer les raccourcis clavier courants
+  document.onkeydown = function(e) {
+    // Empêcher la touche F12
+    if (e.keyCode === 123) {
+      e.preventDefault();
+      return false;
+    }
+
+    // Empêcher Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+Shift+C (DevTools)
+    if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+      e.preventDefault();
+      return false;
+    }
+
+    // Empêcher Ctrl+U (afficher la source) et Ctrl+S (enregistrer)
+    if (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83)) {
+      e.preventDefault();
+      return false;
+    }
+
+    // (Optionnel) Bloquer Ctrl+I et Ctrl+J (autres façons d'ouvrir DevTools)
+    if (e.ctrlKey && (e.keyCode === 73 || e.keyCode === 74)) {
+      e.preventDefault();
+      return false;
+    }
+  };
+</script>
 
     <style>
         /* Accélération temporaire du fond au clic sur le gâteau */
